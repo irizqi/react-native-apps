@@ -1,0 +1,12 @@
+{
+  "name": "@monoriz/features",
+  "module": "src/index.ts",
+  "type": "module",
+  "devDependencies": {
+    "@monoriz/api": "workspace:^",
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "scheme": "acme",
+  "userInterfaceStyle": "automatic",
+  "orientation": "default",
+  "web": {
+    "output": "server",
+    "favicon": "./assets/favicon.png"
+  },
+  "plugins": [
+    "expo-router"
+  ],
+  "name": "main-app",
+  "slug": "main-app",
+  "android": {
+    "package": "com.isyak.mainapp"
+  }
+}

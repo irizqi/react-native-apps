@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@monoriz/api": ["../../packages/api/src/index.ts"],
+      "@monoriz/ui": ["../../packages/ui/src/index.ts"],
+      "@monoriz/features": ["../../packages/feature/src/index.ts"]
+    }
+  },
+  "extends": "expo/tsconfig.base",
+  "include": ["**/*.ts", "**/*.tsx"]
+}
