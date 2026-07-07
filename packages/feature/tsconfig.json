@@ -1,13 +1,11 @@
 {
   "extends": "@monoriz/typescript-config/react-library.json",
   "compilerOptions": {
-    "ignoreDeprecations": "5.0",
-    "baseUrl": ".",
     "paths": {
       "@monoriz/api": ["../api/src/index.ts"],
       "@monoriz/ui": ["../ui/src/index.ts"]
     },
     "noEmit": true
   },
-  "include": ["src"]
+  "include": ["**/*.ts", "**/*.tsx"]
 }
