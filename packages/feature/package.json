@@ -2,11 +2,13 @@
   "name": "@monoriz/features",
   "module": "src/index.ts",
   "type": "module",
+  "scripts": {
+    "lint": "eslint . --max-warnings 0",
+    "typecheck": "tsc --noEmit"
+  },
   "devDependencies": {
     "@monoriz/api": "workspace:^",
-    "@types/bun": "latest"
-  },
-  "peerDependencies": {
-    "typescript": "^5"
+    "@types/bun": "latest",
+    "typescript": "^5.9.3"
   }
 }

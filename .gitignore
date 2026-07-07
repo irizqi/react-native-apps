@@ -1,5 +1,6 @@
 # dependencies (bun install)
 node_modules
+.turbo
 
 # output
 out
@@ -33,9 +34,10 @@ report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 # Finder (MacOS) folder config
 .DS_Store
 
-apps/*/android
-apps/*/ios
-apps/*/web
+./apps/**/android
+./apps/**/ios
+./apps/**/web
 
 ./packages/**/node_modules
 ./apps/**/node_modules
+./app/**/.turbo

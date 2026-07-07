@@ -1,1 +1,1 @@
-export * from './trademark-analyzer/libs/api';
+export * from "./trademark-analyzer/libs/api.js";

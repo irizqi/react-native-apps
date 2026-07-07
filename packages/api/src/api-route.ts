@@ -1,8 +1,8 @@
 /**
  * Route configuration types
  */
-export type RouteConfig = 
-  | string 
+export type RouteConfig =
+  | string
   | {
       path: string;
       params?: string[];
@@ -13,12 +13,6 @@ export type RouteDefinitions = Record<string, RouteConfig>;
 /**
  * Extract parameter names from route config
  */
-type ExtractParams<T extends RouteConfig> = T extends { params: infer P }
-  ? P extends string[]
-    ? Record<P[number], string | number>
-    : never
-  : never;
-
 /**
  * Map route definitions to their parameter types
  */
@@ -32,7 +26,7 @@ type RouteParams<T extends RouteDefinitions> = {
 
 /**
  * Enhanced ApiRoute with typed parameters
- * 
+ *
  * @example
  * ```typescript
  * const routes = new ApiRoute({
@@ -41,7 +35,7 @@ type RouteParams<T extends RouteDefinitions> = {
  *   updateUser: { path: '/users/:id', params: ['id'] },
  *   getUserPosts: { path: '/users/:userId/posts/:postId', params: ['userId', 'postId'] },
  * });
- * 
+ *
  * // Type-safe usage
  * routes.route('getUser', { id: '123' }); // ✓ OK
  * routes.route('getUserPosts', { userId: '1', postId: '2' }); // ✓ OK
@@ -51,7 +45,7 @@ type RouteParams<T extends RouteDefinitions> = {
 class ApiRoute<T extends RouteDefinitions = RouteDefinitions> {
   constructor(
     private routes: T,
-    private baseApi: string = ''
+    private baseApi: string = "",
   ) {}
 
   /**
@@ -59,35 +53,36 @@ class ApiRoute<T extends RouteDefinitions = RouteDefinitions> {
    */
   route<K extends keyof T>(
     key: K,
-    ...args: keyof RouteParams<T>[K] extends never
-      ? []
-      : [params: RouteParams<T>[K]]
+    ...args: keyof RouteParams<T>[K] extends never ? [] : [params: RouteParams<T>[K]]
   ): string;
-  
+
   /**
    * Legacy positional parameters (backward compatible)
    */
   route<K extends keyof T>(key: K, ...params: (string | number)[]): string;
-  
+
   route<K extends keyof T>(
     key: K,
-    ...args: any[]
+    ...args: (Record<string, string | number> | string | number)[]
   ): string {
     const routeConfig = this.routes[key];
-    
+
     if (!routeConfig) {
       throw new Error(`Route not found: ${String(key)}`);
     }
 
     const config = this.normalizeConfig(routeConfig);
-    
+
     // Handle named parameters (object)
-    if (args.length === 1 && typeof args[0] === 'object' && !Array.isArray(args[0])) {
+    if (args.length === 1 && typeof args[0] === "object" && !Array.isArray(args[0])) {
       return this.generateRouteWithNamedParams(config, args[0]);
     }
-    
-    // Handle positional parameters (backward compatible)
-    return this.generateRouteWithPositionalParams(config, args);
+
+    const positionalParams = args.filter((arg): arg is string | number => {
+      return typeof arg === "string" || typeof arg === "number";
+    });
+
+    return this.generateRouteWithPositionalParams(config, positionalParams);
   }
 
   /**
@@ -96,19 +91,29 @@ class ApiRoute<T extends RouteDefinitions = RouteDefinitions> {
   withQuery<K extends keyof T>(
     key: K,
     params?: RouteParams<T>[K] extends never ? undefined : RouteParams<T>[K],
-    query?: Record<string, string | number | boolean | null | undefined>
+    query?: Record<string, string | number | boolean | null | undefined>,
   ): string {
-    let url = params ? this.route(key, params as any) : this.route(key as any);
-    
+    const routeConfig = this.routes[key];
+
+    if (!routeConfig) {
+      throw new Error(`Route not found: ${String(key)}`);
+    }
+
+    const config = this.normalizeConfig(routeConfig);
+    const urlParams = params as Record<string, string | number> | undefined;
+    let url = urlParams
+      ? this.generateRouteWithNamedParams(config, urlParams)
+      : this.generateRouteWithPositionalParams(config, []);
+
     if (query && Object.keys(query).length > 0) {
       const queryString = Object.entries(query)
-        .filter(([_, value]) => value != null)
+        .filter(([, value]) => value != null)
         .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`)
-        .join('&');
-      
+        .join("&");
+
       url += `?${queryString}`;
     }
-    
+
     return url;
   }
 
@@ -127,7 +132,7 @@ class ApiRoute<T extends RouteDefinitions = RouteDefinitions> {
   }
 
   private normalizeConfig(routeConfig: RouteConfig): { path: string; params?: string[] } {
-    if (typeof routeConfig === 'string') {
+    if (typeof routeConfig === "string") {
       return { path: routeConfig };
     }
     return routeConfig;
@@ -135,7 +140,7 @@ class ApiRoute<T extends RouteDefinitions = RouteDefinitions> {
 
   private generateRouteWithNamedParams(
     config: { path: string; params?: string[] },
-    params: Record<string, string | number>
+    params: Record<string, string | number>,
   ): string {
     let path = config.path;
 
@@ -162,7 +167,7 @@ class ApiRoute<T extends RouteDefinitions = RouteDefinitions> {
 
   private generateRouteWithPositionalParams(
     config: { path: string; params?: string[] },
-    params: (string | number)[]
+    params: (string | number)[],
   ): string {
     let path = config.path;
 

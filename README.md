@@ -36,22 +36,26 @@ Ikuti panduan lengkap dari Expo untuk menyiapkan environment development:
 **Opsi A: Menggunakan EAS Build (Recommended)**
 
 1. Install EAS CLI:
+
 ```bash
 npm install -g eas-cli
 ```
 
 2. Login ke Expo account:
+
 ```bash
 eas login
 ```
 
 3. Configure project:
+
 ```bash
 cd apps/main-app
 eas build:configure
 ```
 
 4. Create development build:
+
 ```bash
 eas build --platform android --profile development
 ```
@@ -61,6 +65,7 @@ eas build --platform android --profile development
 1. Setup Android Studio dan Android SDK
 2. Configure environment variables (ANDROID_HOME)
 3. Build locally:
+
 ```bash
 cd apps/main-app
 bunx expo run:android
@@ -70,11 +75,13 @@ bunx expo run:android
 
 1. Install Xcode dari App Store
 2. Install CocoaPods:
+
 ```bash
 sudo gem install cocoapods
 ```
 
 3. Build untuk iOS:
+
 ```bash
 cd apps/main-app
 bunx expo run:ios
@@ -98,16 +105,57 @@ bun run index.ts
 ### Menjalankan di Platform Tertentu
 
 **Android:**
+
 ```bash
 cd apps/main-app
 bunx expo run:android
 ```
 
 **iOS:**
+
 ```bash
 cd apps/main-app
 bunx expo run:ios
 ```
+
+## 🧰 Tooling
+
+Project ini menggunakan tooling berikut dari root workspace:
+
+```bash
+bun run lint
+bun run format
+bun run format:check
+bun run typecheck
+```
+
+- `lint`: menjalankan ESLint untuk semua workspace melalui Turbo.
+- `format`: menjalankan Prettier dan otomatis memformat file sesuai `.prettierrc`.
+- `format:check`: mengecek format Prettier tanpa mengubah file.
+- `typecheck`: menjalankan TypeScript typecheck untuk semua workspace melalui Turbo.
+
+### Prettier
+
+Prettier dikonfigurasi di `.prettierrc` dan file/folder yang tidak perlu diformat dikecualikan melalui `.prettierignore`.
+
+Aturan utama:
+
+- `semi: true`
+- `singleQuote: false`
+- `trailingComma: "all"`
+- `printWidth: 100`
+
+### ESLint Naming Convention
+
+ESLint menggunakan rule `@typescript-eslint/naming-convention` dari shared config `@monoriz/eslint-config`.
+
+Aturan utama:
+
+- default identifier: `camelCase` atau `PascalCase`
+- variable: `camelCase`, `UPPER_CASE`, atau `PascalCase`
+- parameter: `camelCase`
+- type/class/interface: `PascalCase`
+- property dan object literal property tidak dibatasi agar tetap kompatibel dengan API response
 
 ## 🔧 Troubleshooting
 
@@ -123,16 +171,19 @@ bunx expo start --clear
 ### Error: "Metro bundler not starting"
 
 1. Clear metro cache:
+
 ```bash
 bunx expo start --clear
 ```
 
 2. Clear watchman cache (jika terinstall):
+
 ```bash
 watchman watch-del-all
 ```
 
 3. Clear node modules dan reinstall:
+
 ```bash
 rm -rf node_modules
 bun install
@@ -141,12 +192,14 @@ bun install
 ### Android Build Errors
 
 1. Clean Android build:
+
 ```bash
 cd apps/main-app/android
 ./gradlew clean
 ```
 
 2. Rebuild:
+
 ```bash
 cd apps/main-app
 bunx expo run:android
@@ -161,6 +214,7 @@ bunx expo start --port 8082
 ```
 
 Atau matikan proses yang menggunakan port:
+
 ```bash
 lsof -ti:8081 | xargs kill
 ```
