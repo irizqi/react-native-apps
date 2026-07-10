@@ -4,11 +4,11 @@ import { toast } from "sonner";
 
 interface QueryClientOptions {
   logout?: () => void;
-  NotFound?: () => void;
+  notFound?: () => void;
   errorPageNavigation?: () => void;
 }
 
-const ApiClient = ({ logout, NotFound, errorPageNavigation }: QueryClientOptions) =>
+const ApiClient = ({ logout, notFound, errorPageNavigation }: QueryClientOptions) =>
   new QueryClient({
     defaultOptions: {
       queries: {
@@ -42,7 +42,7 @@ const ApiClient = ({ logout, NotFound, errorPageNavigation }: QueryClientOptions
             errorPageNavigation?.();
           }
           if (error.response?.status === 403) {
-            NotFound?.();
+            notFound?.();
           }
         }
       },

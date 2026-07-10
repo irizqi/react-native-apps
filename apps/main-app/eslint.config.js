@@ -7,7 +7,7 @@ export default [
     ignores: [".expo/**", "dist/**", "web-build/**", "android/**", "ios/**"],
   },
   {
-    files: ["*.config.js", "metro.config.js"],
+    files: ["*.config.js", "*.config.cjs", "metro.config.cjs"],
     languageOptions: {
       globals: globals.node,
     },
